@@ -1,7 +1,8 @@
 import { Component } from './base/Component';
 import { EventEmitter } from './base/events';
 import { createElement, ensureElement } from '../utils/utils';
-import { IBasketItem, IBasketView, IAction } from '../types';
+import { IBasketView } from '../types';
+
 
 export class Basket extends Component<IBasketView> {
 	protected _list: HTMLElement;
@@ -33,6 +34,7 @@ export class Basket extends Component<IBasketView> {
 					textContent: 'Корзина пуста',
 				})
 			);
+			this.setDisabled(this._button, true);
 		}
 	}
 	get items(): HTMLElement[] {
@@ -59,45 +61,4 @@ export class Basket extends Component<IBasketView> {
 	}
 }
 
-export class BasketItem extends Component<IBasketItem> {
-	protected _index: HTMLElement;
-	protected _title: HTMLElement;
-	protected _price: HTMLElement;
-	protected _buttonDelete: HTMLButtonElement;
 
-	constructor(container: HTMLElement, action?: IAction) {
-		super(container);
-
-		this._index = ensureElement<HTMLElement>('.basket__item-index', container);
-		this._title = ensureElement<HTMLElement>('.card__title', container);
-		this._price = ensureElement<HTMLElement>('.card__price', container);
-		this._buttonDelete = ensureElement<HTMLButtonElement>(
-			'.basket__item-delete',
-			container
-		);
-
-		if (action?.onClick) {
-			this._buttonDelete.addEventListener('click', action.onClick);
-		}
-	}
-
-	set index(value: number) {
-		this.setText(this._index, value);
-	}
-
-	set title(value: string) {
-		this.setText(this._title, value);
-	}
-
-	set price(value: number) {
-		this.setText(this._price, value + ' синапсов');
-	}
-
-	set id(value: string) {
-		this.container.dataset.id = value;
-	}
-
-	get id(): string {
-		return this.container.dataset.id || '';
-	}
-}

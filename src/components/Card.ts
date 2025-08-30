@@ -1,51 +1,25 @@
-import { Component } from './base/Component';
 import { Iproduct, IAction } from '../types/index';
 import { ensureElement, bem } from '../utils/utils';
+import { CardMain } from './CardMain';
 
-export class Card<T> extends Component<Iproduct> {
-	protected _title: HTMLElement;
-	protected _price: HTMLElement;
+export class Card extends CardMain<Iproduct> {
 	protected _image: HTMLImageElement;
 	protected _category: HTMLElement;
 	protected _description?: HTMLElement;
-	protected _buttonModal?: HTMLButtonElement;
 
-	constructor(
-		protected blockName: string,
-		container: HTMLElement,
-		actions?: IAction
-	) {
-		super(container);
+	constructor(container: HTMLElement, actions?: IAction) {
+		super(container, actions);
 
-		this._title = ensureElement<HTMLElement>(`.${blockName}__title`, container);
 		this._image = ensureElement<HTMLImageElement>(
-			`.${blockName}__image`,
+			'.card__image',
 			container
 		);
-		this._price = ensureElement<HTMLElement>(`.${blockName}__price`, container);
-		this._category = container.querySelector(`.${blockName}__category`);
-		this._buttonModal = container.querySelector(`.${blockName}__button`);
-		this._description = container.querySelector(`.${blockName}__text`);
-
-		if (actions?.onClick) {
-			if (this._buttonModal) {
-				this._buttonModal.textContent = 'Купить';
-				this._buttonModal.addEventListener('click', actions.onClick);
-			} else {
-				container.addEventListener('click', actions.onClick);
-			}
-		}
-	}
-	set id(value: string) {
-		this.container.dataset.id = value;
-	}
-
-	get id(): string {
-		return this.container.dataset.id || '';
-	}
-
-	set title(value: string) {
-		this.setText(this._title, value);
+		this._category = ensureElement<HTMLElement>('.card__category', container);
+		this._description = container.querySelector(`.card__text`);
+		
+		if (this._button) {
+            this._button.textContent = 'Купить';
+        }
 	}
 
 	set description(value: string | string[]) {
@@ -72,20 +46,9 @@ export class Card<T> extends Component<Iproduct> {
 		}[value];
 
 		if (modifier) {
-			const className = bem(this.blockName, 'category', modifier).name;
+			const className = bem('card', 'category', modifier).name;
 			this.setText(this._category, value);
 			this.toggleClass(this._category, className, true);
-		}
-	}
-
-	set price(value: number) {
-		if (value === null || isNaN(value)) {
-			this.setText(this._price, 'Бесценно');
-			this.setDisabled(this._buttonModal, true);
-			this.setText(this._buttonModal, 'Недоступно');
-		} else {
-			this.setText(this._price, `${value} синапсов`);
-			this.setDisabled(this._buttonModal, false);
 		}
 	}
 

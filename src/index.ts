@@ -8,11 +8,12 @@ import { EventEmitter } from './components/base/events';
 import { Page } from './components/Page';
 import { Modal } from './components/Modal';
 import { Card } from './components/Card';
-import { Basket, BasketItem } from './components/Basket';
+import { Basket } from './components/Basket';
 import { Order } from './components/Order';
 import { Contacts } from './components/Contacts';
 import { Success } from './components/Success';
 import { ensureElement, cloneTemplate } from './utils/utils';
+import { BasketItem } from './components/BasketItem';
 
 const events = new EventEmitter();
 const api = new CatalogAPI(CDN_URL, API_URL);
@@ -63,7 +64,7 @@ api
 // ========== КАТАЛОГ ==========
 events.on<ICatalog>('items:changed', () => {
 	page.catalog = appState.catalog.map((item) => {
-		const card = new Card('card', cloneTemplate(cardCatalogTemplate), {
+		const card = new Card(cloneTemplate(cardCatalogTemplate), {
 			onClick: () => events.emit('card:select', item),
 		});
 		return card.render({
@@ -82,11 +83,12 @@ events.on('card:select', (item: Iproduct) => {
 		api
 			.getProduct(item.id)
 			.then((res) => {
-				const card = new Card('card', cloneTemplate(cardPreviewTemplate), {
+				const card = new Card(cloneTemplate(cardPreviewTemplate), {
 					onClick: (evt) => {
 						const button = evt.target as HTMLButtonElement;
 						if (button.textContent === 'Купить') {
 							button.textContent = 'В корзину';
+							
 							appState.toggleOrderItem(res.id, true);
 							page.counter = appState.buyer.items.length;
 							events.emit('basket:changed');
@@ -182,8 +184,6 @@ events.on('form:errors', (errors: FormErrors) => {
 // ========== ФОРМА КОНТАКТОВ ==========
 events.on('contacts:open', () => {
 	appState.validateContacts();
-	// const validation = appState.isFilledFieldsContacts();
-	// contact.valid = validation;
 	modal.render({
 		content: contact.render({
 			email: appState.buyer.email,
