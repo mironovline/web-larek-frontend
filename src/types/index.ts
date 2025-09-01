@@ -18,9 +18,9 @@ export interface Ibuyer {
 }
 
 export interface IBasketView {
-    items: HTMLElement[];
-    total: number;
-    selected: string[];
+	items: HTMLElement[];
+	total: number;
+	selected: string[];
 }
 
 export interface IBasketItem {
@@ -46,7 +46,7 @@ export interface IPage {
 }
 
 export interface ICatalogAPI {
-    getCatalog: () => Promise<Iproduct[]>;
+	getCatalog: () => Promise<Iproduct[]>;
 }
 
 export interface ICatalog {
@@ -65,7 +65,7 @@ export interface IFormState {
 export type FormErrors = Partial<Record<keyof Ibuyer, string>>;
 
 export interface ISuccess {
-    total: number;
+	total: number;
 }
 
 export interface IOrderResult {

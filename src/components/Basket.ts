@@ -3,7 +3,6 @@ import { EventEmitter } from './base/events';
 import { createElement, ensureElement } from '../utils/utils';
 import { IBasketView } from '../types';
 
-
 export class Basket extends Component<IBasketView> {
 	protected _list: HTMLElement;
 	protected _total: HTMLElement;
@@ -37,6 +36,7 @@ export class Basket extends Component<IBasketView> {
 			this.setDisabled(this._button, true);
 		}
 	}
+
 	get items(): HTMLElement[] {
 		if (this._list.childElementCount === 0) {
 			return [
@@ -49,16 +49,10 @@ export class Basket extends Component<IBasketView> {
 	}
 
 	set selected(items: string[]) {
-		if (items.length) {
-			this.setDisabled(this._button, false);
-		} else {
-			this.setDisabled(this._button, true);
-		}
+		this.setDisabled(this._button, false);
 	}
 
 	set total(total: number) {
 		this.setText(this._total, String(total + ' синапсов'));
 	}
 }
-
-

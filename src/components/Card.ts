@@ -10,16 +10,13 @@ export class Card extends CardMain<Iproduct> {
 	constructor(container: HTMLElement, actions?: IAction) {
 		super(container, actions);
 
-		this._image = ensureElement<HTMLImageElement>(
-			'.card__image',
-			container
-		);
+		this._image = ensureElement<HTMLImageElement>('.card__image', container);
 		this._category = ensureElement<HTMLElement>('.card__category', container);
 		this._description = container.querySelector(`.card__text`);
-		
+
 		if (this._button) {
-            this._button.textContent = 'Купить';
-        }
+			this.setText(this._button, 'Купить');
+		}
 	}
 
 	set description(value: string | string[]) {

@@ -14,14 +14,14 @@ export class Order extends Form<Partial<Ibuyer>> {
 		this._btnCard = ensureElement<HTMLButtonElement>('.online', this.container);
 		// Обработчики для кнопок способа оплаты
 		this._btnCash.addEventListener('click', () => {
-			this._btnCash.classList.add('button_alt-active');
-			this._btnCard.classList.remove('button_alt-active');
+			this.toggleClass(this._btnCash, 'button_alt-active', true);
+			this.toggleClass(this._btnCard, 'button_alt-active', false);
 			this.paymentChange('cash');
 		});
 
 		this._btnCard.addEventListener('click', () => {
-			this._btnCard.classList.add('button_alt-active');
-			this._btnCash.classList.remove('button_alt-active');
+			this.toggleClass(this._btnCard, 'button_alt-active', true);
+			this.toggleClass(this._btnCash, 'button_alt-active', false);
 			this.paymentChange('online');
 		});
 	}
@@ -39,11 +39,11 @@ export class Order extends Form<Partial<Ibuyer>> {
 	//метод для установки способа оплаты
 	set payment(value: string) {
 		if (value === 'cash') {
-			this._btnCash.classList.add('button_alt-active');
-			this._btnCard.classList.remove('button_alt-active');
+			this.toggleClass(this._btnCash, 'button_alt-active', true);
+			this.toggleClass(this._btnCard, 'button_alt-active', false);
 		} else if (value === 'card') {
-			this._btnCard.classList.add('button_alt-active');
-			this._btnCash.classList.remove('button_alt-active');
+			this.toggleClass(this._btnCard, 'button_alt-active', true);
+			this.toggleClass(this._btnCash, 'button_alt-active', false);
 		}
 	}
 }

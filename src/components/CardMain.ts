@@ -2,10 +2,11 @@ import { Component } from './base/Component';
 import { ensureElement } from '../utils/utils';
 import { IAction } from '../types/index';
 
-export abstract class CardMain<T> extends Component<T> {
+export class CardMain<T> extends Component<T> {
 	protected _title: HTMLElement;
 	protected _price: HTMLElement;
 	protected _button?: HTMLButtonElement;
+	protected _isInBasket: boolean = false;
 
 	constructor(container: HTMLElement, actions?: IAction) {
 		super(container);
@@ -33,7 +34,7 @@ export abstract class CardMain<T> extends Component<T> {
 		this.setText(this._title, value);
 	}
 
-	set price(value: number) {
+	set price(value: number | null) {
 		if (value === null || isNaN(value)) {
 			this.setText(this._price, 'Бесценно');
 			this.toggleButton(true);
@@ -43,6 +44,21 @@ export abstract class CardMain<T> extends Component<T> {
 			this.toggleButton(false);
 		}
 	}
+
+	set buttonText(value: string) {
+		if (this._button) {
+			this.setText(this._button, value);
+		}
+	}
+	get isInBasket(): boolean {
+		return this._isInBasket;
+	}
+
+	set isInBasket(value: boolean) {
+		this._isInBasket = value;
+		this.buttonText = value ? 'В корзину' : 'Купить';
+	}
+
 	toggleButton(state: boolean) {
 		this.setDisabled(this._button, state);
 	}

@@ -1,6 +1,6 @@
 import './scss/styles.scss';
 
-import { CatalogAPI } from './components/CatalogAPI';
+import { CatalogAPI } from './components/base/CatalogAPI';
 import { API_URL, CDN_URL } from './utils/constants';
 import { Iproduct, FormErrors, ICatalog } from './types';
 import { AppState } from './components/AppData';
@@ -85,19 +85,17 @@ events.on('card:select', (item: Iproduct) => {
 			.then((res) => {
 				const card = new Card(cloneTemplate(cardPreviewTemplate), {
 					onClick: (evt) => {
-						const button = evt.target as HTMLButtonElement;
-						if (button.textContent === 'Купить') {
-							button.textContent = 'В корзину';
-							
+						if (!card.isInBasket) {
+							card.isInBasket = true;
 							appState.toggleOrderItem(res.id, true);
 							page.counter = appState.buyer.items.length;
-							events.emit('basket:changed');
-						} else if (button.textContent === 'В корзину') {
+							events.emit('basket:changed', item);
+						} else {
 							events.emit('basket:open', item);
 						}
 					},
 				});
-
+				card.isInBasket = appState.buyer.items.includes(res.id);
 				modal.render({
 					content: card.render({
 						title: res.title,
